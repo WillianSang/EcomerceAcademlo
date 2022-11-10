@@ -34,8 +34,6 @@ const containerBuyItemes= document.querySelector('.buy__items')
 
 let objClothesBuy = {}
 
-
-
 function printClothes() {
     let html = ``
     clothes.map(({id,nombre,colection,stock,price,url}) => {
@@ -53,7 +51,7 @@ function printClothes() {
                         <span class="stock"> ${stock} Disponibles </span>
                         <h3 class="price"> $${price}.00 </h3>
                     </div>
-                    <button id="${id}" class="card__buton btn__add"> Lo Quiero ! </button>
+                    <button id="${id}" class="card__buton btn__add"> Comprar </button>
                 </div>
             </div> `
     })
@@ -91,19 +89,18 @@ function printInBuyCar() {
     containerBuyItemes.innerHTML = html
 }
 
+function addClothes(idClothes) {
+    const currentClothes = clothes.find((item) => item.id === idClothes)
+
+    if(currentClothes.stock === objClothesBuy[idClothes].amount)
+        return alert("STOCK AGOTADO")
+    objClothesBuy[currentClothes.id].amount++ 
+}
+
 printClothes()
 
-// Togle para el icono del buyCar
 
-const buyCar = document.getElementById('icon__buyCar')
-const clothesBuy = document.querySelector('.clothes__buy')
-
-buyCar.addEventListener('click', () => { 
-    clothesBuy.classList.toggle("clothes__buy--show")
-});
-
-//Funcionalidad para agregar pintar elementos en la seccion del carrito 
-
+//Boton Agregar(lo quiero) que agrega de la seccion shop a la seccion carrito
 containerClothes.addEventListener('click', (e) => {
     if(e.target.classList.contains('btn__add')) { 
         const idClothes = Number(e.target.id)
@@ -111,7 +108,7 @@ containerClothes.addEventListener('click', (e) => {
         const currentClothes = clothes.find((item) => item.id === idClothes)
 
         if (objClothesBuy[currentClothes.id]) {
-            objClothesBuy[currentClothes.id].amount++ 
+            addClothes(idClothes)
 
         } else {
             objClothesBuy[currentClothes.id] = currentClothes
@@ -123,20 +120,41 @@ containerClothes.addEventListener('click', (e) => {
 
 })
 
-//funcionalidad para los botenes en la seccion del carrito 
+//funcionalidad de los botones en la seccion del carrtio que te permite agregar reducir o eliminar algun producto
 containerBuyItemes.addEventListener('click', (e) => {
     if (e.target.classList.contains('buycar__btn--add')) {
-        const idFoodBuycar = Number(e.target.id) 
-        objClothesBuy[idFoodBuycar].amount++ 
+        const idClothes = Number(e.target.id) 
+        addClothes(idClothes)
     }
+
     if (e.target.classList.contains('buycar__btn--del')) {
-        const idFoodBuycar = Number(e.target.id) 
-        objClothesBuy[idFoodBuycar].amount--
+        const idClothes = Number(e.target.id) 
+
+        if (objClothesBuy[idClothes].amount === 1) {
+            const option = confirm("QUIERES QUITARLO DEL CARRITO?")
+            if(option) {delete objClothesBuy[idClothes]} 
+        } else {
+            objClothesBuy[idClothes].amount--
+        } 
     }
+
     if (e.target.classList.contains('buycar__deleteItem')) {
-        const idFoodBuycar = Number(e.target.id) 
-        delete objClothesBuy[idFoodBuycar]
+        const idClothes = Number(e.target.id) 
+
+        const option = confirm("QUIERES QUITARLO DEL CARRITO?")
+        if(option) { 
+            delete objClothesBuy[idClothes]
+        }
     }
 
     printInBuyCar()
 })
+
+// Togle para el icono del buyCar
+
+const buyCar = document.getElementById('icon__buyCar')
+const clothesBuy = document.querySelector('.clothes__buy')
+
+buyCar.addEventListener('click', () => { 
+    clothesBuy.classList.toggle("clothes__buy--show")
+});
