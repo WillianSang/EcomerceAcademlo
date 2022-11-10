@@ -246,7 +246,7 @@ body {
     font-size: 1.05em;
     color: #524689;
     font-weight: 400;
-    background-color: #deb522;
+    background-color: var(--firstColor);
 }
 
 .card__buton:hover {
@@ -364,7 +364,65 @@ body {
 }
 
 .buy__total {
-    
     height: 20%;
     padding: 1rem;
+    background-color: #1b1a235e;
+    text-align: center;
+    border-radius: 1.5rem;
 }
+
+.total__result{
+    display: flex;
+    justify-content: center;
+    gap: 4rem; 
+    align-items: center;
+}
+
+.total__result img {
+    width: 2.6rem;
+    color: #d75b2e;
+    filter: invert(42%) sepia(44%) saturate(1049%) hue-rotate(333deg) brightness(96%) contrast(94%);;
+}
+
+.total__result--price {
+    color: var(--firstColor);
+}
+
+.boton__total {
+    width: 40%;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 1.05em;
+    color: #524689;
+    font-weight: 500;
+    background-color: #dab327;
+}
+
+.boton__total:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+.carEmpty {
+    display: flex;
+    height: 80%;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4rem;
+    align-items: center;
+}
+
+.img__carEmpty {
+    width: 12rem;
+
+}
+
+.text__carEmpty {
+    color: #dab327;
+    font-size: 1.2rem;
+    letter-spacing: 1.1px;
+}
+

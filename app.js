@@ -1,5 +1,12 @@
-//Empezar por las 500 codelines con toda la logica para el portafolio 
 
+const containerClothes = document.getElementById("container__clothes")
+const containerBuyItemes= document.querySelector('.buy__items')
+const buyTotal= document.querySelector('.buy__total')  
+const buyCar = document.getElementById('icon__buyCar')
+const clothesBuy = document.querySelector('.clothes__buy')
+
+
+//funcionalidad para pintar las cards  en la galery
 const clothes = [
     {
         id: 0,
@@ -29,11 +36,6 @@ const clothes = [
     },
 ]
 
-const containerClothes = document.getElementById("container__clothes")
-const containerBuyItemes= document.querySelector('.buy__items')
-
-let objClothesBuy = {}
-
 function printClothes() {
     let html = ``
     clothes.map(({id,nombre,colection,stock,price,url}) => {
@@ -51,11 +53,41 @@ function printClothes() {
                         <span class="stock"> ${stock} Disponibles </span>
                         <h3 class="price"> $${price}.00 </h3>
                     </div>
-                    <button id="${id}" class="card__buton btn__add"> Comprar </button>
+                    <button id="${id}" class="card__buton btn__add"> Add to Car </button>
                 </div>
             </div> `
     })
     containerClothes.innerHTML= html
+}
+printClothes()
+
+// Funcionalidades dentro de la Seccion del Carrito de Compras
+let objClothesBuy = {}
+ 
+function printBuyTotal(){
+    const arrayTotalBuy = Object.values(objClothesBuy)
+    if(!arrayTotalBuy.length) {
+        clothesBuy.innerHTML = `
+            <div class="carEmpty">
+                <img class="img__carEmpty" src="./img/trash.png">
+                <p class="text__carEmpty"> Aun no hay Productos Aqui </p4>
+             </div> `
+    } else {
+        let total = arrayTotalBuy.reduce((acum, curr) => {
+            acum += curr.price * curr.amount
+            return acum
+        },0)
+    
+        buyTotal.innerHTML = `
+            <div class="total__result">
+                <div>
+                    <h3 class="total__result--text"> Total:  </h3>
+                    <h2 class="total__result--price"> $ ${total}.00 </h2>
+                </div>
+                <img src="./img/bolsa.png">
+            </div>
+            <button class="boton boton__total"> Comprar </button>  ` 
+    }
 }
 
 function printInBuyCar() {
@@ -87,6 +119,7 @@ function printInBuyCar() {
         </div>  `
     })
     containerBuyItemes.innerHTML = html
+    printBuyTotal()
 }
 
 function addClothes(idClothes) {
@@ -97,14 +130,18 @@ function addClothes(idClothes) {
     objClothesBuy[currentClothes.id].amount++ 
 }
 
-printClothes()
+function delClohtes(idClothes){
+    const option = confirm("QUIERES QUITARLO DEL CARRITO?")
+    if(option) { 
+        delete objClothesBuy[idClothes]
+    }
+}
 
 
-//Boton Agregar(lo quiero) que agrega de la seccion shop a la seccion carrito
+//Delegation-Events en la Gallery al Boton Agregar de cada Cards
 containerClothes.addEventListener('click', (e) => {
     if(e.target.classList.contains('btn__add')) { 
         const idClothes = Number(e.target.id)
-
         const currentClothes = clothes.find((item) => item.id === idClothes)
 
         if (objClothesBuy[currentClothes.id]) {
@@ -114,14 +151,13 @@ containerClothes.addEventListener('click', (e) => {
             objClothesBuy[currentClothes.id] = currentClothes
             objClothesBuy[currentClothes.id].amount = 1
         }
-
         printInBuyCar()
     };
-
 })
 
-//funcionalidad de los botones en la seccion del carrtio que te permite agregar reducir o eliminar algun producto
+//Delegation-Events a la Section de Compras en los Botones Aumentar Disminuir and Delete
 containerBuyItemes.addEventListener('click', (e) => {
+
     if (e.target.classList.contains('buycar__btn--add')) {
         const idClothes = Number(e.target.id) 
         addClothes(idClothes)
@@ -129,10 +165,9 @@ containerBuyItemes.addEventListener('click', (e) => {
 
     if (e.target.classList.contains('buycar__btn--del')) {
         const idClothes = Number(e.target.id) 
-
         if (objClothesBuy[idClothes].amount === 1) {
-            const option = confirm("QUIERES QUITARLO DEL CARRITO?")
-            if(option) {delete objClothesBuy[idClothes]} 
+            delClohtes(idClothes)
+            
         } else {
             objClothesBuy[idClothes].amount--
         } 
@@ -140,21 +175,13 @@ containerBuyItemes.addEventListener('click', (e) => {
 
     if (e.target.classList.contains('buycar__deleteItem')) {
         const idClothes = Number(e.target.id) 
-
-        const option = confirm("QUIERES QUITARLO DEL CARRITO?")
-        if(option) { 
-            delete objClothesBuy[idClothes]
-        }
+        delClohtes(idClothes)
     }
 
     printInBuyCar()
 })
 
-// Togle para el icono del buyCar
-
-const buyCar = document.getElementById('icon__buyCar')
-const clothesBuy = document.querySelector('.clothes__buy')
-
+//AddEvenListener al Icono del Carrito para mostrar la Seccion del Carrito de Compras
 buyCar.addEventListener('click', () => { 
     clothesBuy.classList.toggle("clothes__buy--show")
 });
