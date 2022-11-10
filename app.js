@@ -7,7 +7,7 @@ const clothesBuy = document.querySelector('.clothes__buy')
 
 
 //funcionalidad para pintar las cards  en la galery
-const clothes = [
+let clothes = [
     {
         id: 0,
         nombre:'HODDIES',
@@ -148,7 +148,7 @@ containerClothes.addEventListener('click', (e) => {
             addClothes(idClothes)
 
         } else {
-            objClothesBuy[currentClothes.id] = currentClothes
+            objClothesBuy[currentClothes.id] = {... currentClothes}
             objClothesBuy[currentClothes.id].amount = 1
         }
         printInBuyCar()
@@ -179,6 +179,28 @@ containerBuyItemes.addEventListener('click', (e) => {
     }
 
     printInBuyCar()
+})
+
+buyTotal.addEventListener('click', (e) => {
+    if (e.target.classList.contains('boton__total')) {
+        const sure = confirm("Esta seguro de comprar?")
+        if(sure) {
+            clothes = clothes.map(item => {
+                if (objClothesBuy[item.id]?.id === item.id ) {
+                    return {
+                        ... item,
+                        stock: item.stock - objClothesBuy[item.id].amount
+                    }; 
+                } else {
+                    return item
+                }
+            })
+            objClothesBuy = {}
+            printClothes()
+            printInBuyCar() 
+            
+        }
+    }   
 })
 
 //AddEvenListener al Icono del Carrito para mostrar la Seccion del Carrito de Compras
