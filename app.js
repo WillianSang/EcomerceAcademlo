@@ -4,6 +4,7 @@ const containerBuyItemes= document.querySelector('.buy__items')
 const buyTotal= document.querySelector('.buy__total')  
 const buyCar = document.getElementById('icon__buyCar')
 const clothesBuy = document.querySelector('.clothes__buy')
+const countShop = document.querySelector('.count__Shop')
 
 
 //funcionalidad para pintar las cards  en la galery
@@ -39,6 +40,10 @@ let clothes = [
 function printClothes() {
     let html = ``
     clothes.map(({id,nombre,colection,stock,price,url}) => {
+        const btnBuy = stock
+            ?  `<button id="${id}" class="card__buton btn__add"> Add to Car </button>`
+            :  `<button id="${id}" class="card__buton  btn__nodrop"> Stock Agotado </button>`
+
         html +=  `
             <div id="${id}" class="cards__shop">
                 <div class="card__img" >
@@ -53,13 +58,14 @@ function printClothes() {
                         <span class="stock"> ${stock} Disponibles </span>
                         <h3 class="price"> $${price}.00 </h3>
                     </div>
-                    <button id="${id}" class="card__buton btn__add"> Add to Car </button>
+                    ${btnBuy}
                 </div>
             </div> `
     })
     containerClothes.innerHTML= html
 }
 printClothes()
+
 
 // Funcionalidades dentro de la Seccion del Carrito de Compras
 let objClothesBuy = {}
@@ -120,6 +126,7 @@ function printInBuyCar() {
     })
     containerBuyItemes.innerHTML = html
     printBuyTotal()
+    countProducts()
 }
 
 function addClothes(idClothes) {
@@ -135,6 +142,16 @@ function delClohtes(idClothes){
     if(option) { 
         delete objClothesBuy[idClothes]
     }
+}
+
+//funcion para contabilizar en el index del carrito 
+function countProducts() {
+    const arrayProducts = Object.values(objClothesBuy)
+    let suma = arrayProducts.reduce((acum, curr) => {
+        acum += curr.amount
+        return acum
+    },0)
+    countShop.innerHTML = suma
 }
 
 
