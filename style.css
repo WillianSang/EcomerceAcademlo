@@ -98,7 +98,6 @@ body {
     font-weight: 500;
     border-radius: 50%;
     text-align: center;
-
 }
 
  /* --------- this part is for portada -------------*/
@@ -453,3 +452,26 @@ body {
     letter-spacing: 1.1px;
 }
 
+footer {
+    margin-top: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+footer p {
+    font-size: 17px;
+    color: #84ac5a;
+}
+
+
+footer img {
+    width: 30px;
+    filter: invert(68%) sepia(13%) saturate(1274%) hue-rotate(47deg) brightness(91%) contrast(86%);
+}
+
+footer img:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
